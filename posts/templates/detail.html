@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <h1>{{post.title}}</h1>
+    <p>{{post.content}}</p>
+    <p>{{post.created_at}}</p>
+
+    <hr>
+
+    <form action="{% url 'posts:comment_create' post_id=post.id %}" method="POST">
+        {% csrf_token %}
+        {{comment_form}}
+        <input type="submit">
+    </form>
+
+    <a href="{% url 'posts:update' id=post.id %}">수정</a>
+
+    <hr>
+    {% for comment in post.comment_set.all %}
+        <p>
+            {{comment.content}}
+            <a href="{% url 'posts:delete' post_id=post.id id=comment.id %}">삭제</a>
+        </p>
+    {% endfor %}
+{% endblock %}
